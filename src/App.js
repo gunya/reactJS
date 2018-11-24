@@ -5,8 +5,10 @@ import Person from './Person/Person.js';
 class App extends Component {
   state = {
       persons:[
-          {name:"Sergei", age:32}, {name:"Katya", age:31},
-          {name:"Max", age:0}, {name:"Alice", age:0}
+          {name:"Sergei", age:32},
+          {name:"Katya", age:31},
+          {name:"Max", age:0},
+          {name:"Alice", age:0}
       ],
       showPersons:false
   };
@@ -20,11 +22,10 @@ class App extends Component {
     ]});
   };
 
-  nameChangedHandler = (event) => {
-      this.setState({persons:[
-              {name:"Sergei", age:32}, {name:event.target.value, age:31},
-              {name:"Max", age:0}, {name:"Alice", age:0}
-          ]});
+  deletePersonHandler = (personIndex) => {
+      const persons = this.state.persons;
+      persons.splice(personIndex, 1);
+      this.setState({persons: persons});
   };
 
   togglePersonsHandler = () => {
@@ -45,8 +46,9 @@ class App extends Component {
       if (this.state.showPersons){
           persons = (
               <div>
-                  {this.state.persons.map(person => {
+                  {this.state.persons.map((person, index) => {
                       return <Person
+                          click={() => this.deletePersonHandler(index)}
                           name={person.name}
                           age={person.age}/>
                   })}
