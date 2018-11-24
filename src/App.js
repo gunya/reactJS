@@ -5,10 +5,10 @@ import Person from './Person/Person.js';
 class App extends Component {
   state = {
       persons:[
-          {name:"Sergei", age:32},
-          {name:"Katya", age:31},
-          {name:"Max", age:0},
-          {name:"Alice", age:0}
+          {id:0, name:"Sergei", age:32},
+          {id:1, name:"Katya", age:31},
+          {id:2, name:"Max", age:0},
+          {id:3, name:"Alice", age:0}
       ],
       showPersons:false
   };
@@ -20,6 +20,20 @@ class App extends Component {
               {name:newName, age:21}, {name:"Katya", age:20},
               {name:"Max", age:0}, {name:"Alice", age:0}
     ]});
+  };
+
+  nameChangedHandler = (event, id) => {
+    const personIndex = this.state.persons.findIndex(p => {
+        return p.id === id;
+    });
+
+    const person = {...this.state.persons[personIndex]}; // new deep object
+    //  const person = Object.assign({}, this.state.persons[personIndex]) // new deep object
+    person.name = event.target.value;
+
+    const persons = [...this.state.persons];
+    persons[personIndex] = person;
+    this.setState({persons: persons});
   };
 
   deletePersonHandler = (personIndex) => {
@@ -51,7 +65,10 @@ class App extends Component {
                       return <Person
                           click={() => this.deletePersonHandler(index)}
                           name={person.name}
-                          age={person.age}/>
+                          age={person.age}
+                          key={person.id}
+                          changed={(event) => this.nameChangedHandler(event, person.id)}
+                      />
                   })}
               </div>
           );
